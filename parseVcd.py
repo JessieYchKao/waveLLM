@@ -10,14 +10,18 @@ from langchain_chroma import Chroma
 from langchain_deepseek import ChatDeepSeek
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_community.vectorstores import FAISS
 
-EMBEDDING_MODEL_NAME = "text-embedding-ada-002"
+from tqdm import tqdm
+import pickle
+
+EMBEDDING_MODEL_NAME = "nomic-embed-text"
 MODEL_NAME = "deepseek-reasoner"
 API_KEY="my-api-key"
 
 def llama(greet, prompt):
     print('Waiting for answer from llama3...\n')
-    llm = OllamaLLM(model='llama3:latest', base_url='http://localhost:11434', temperature=0.0)
+    llm = OllamaLLM(model='gemma3:27b', base_url='http://localhost:11434', temperature=0.0)
     
     output = ""
     for chunk in llm.stream(greet + prompt):
@@ -43,10 +47,7 @@ def deepseek(greet, prompt):
 def load_and_chunk_vcd_data(vcd_file_path: str):
     vcd = VCDVCD(vcd_file_path)
     documents = []
-    print(vcd.signals)
-    for signal_name in vcd.signals:
-        if signal_name == 'hw_top.dut.u_hdcom28_top.cpu_core.instr_addr_o' : 
-            print(vcd[signal_name])
+    for signal_name in tqdm(vcd.signals):
         signal_content = json.dumps([{"time": x[0], "value": x[1]} for x in vcd[signal_name].tv], indent=2)
 
         doc = Document(
@@ -99,19 +100,33 @@ def setup_rag_chain(vectorstore):
 
 if __name__ == "__main__":
     
-    # documents = load_and_chunk_vcd_data('dump.vcd')
-    # setup_vector_store(documents)
-    vectorstore = Chroma(
-        embedding_function=EMBEDDING_MODEL_NAME, 
-        collection_name="vcd", 
-        persist_directory="chroma_data"
-    )
+    
+    
+    documents = load_and_chunk_vcd_data('dump.vcd')
+
+    # TODO make loading an exitising documents array easier
+    with open('documents.pkl', 'wb') as f:
+        pickle.dump(documents, f)
+
+    # with open('documents.pkl', 'rb') as f:
+    #     documents = pickle.load(f)
+
+    vectorstore = setup_vector_store(documents)
+
+    # TODO Make reloading an existing DB easier
+    # embedding_model = OllamaEmbeddings(model="nomic-embed-text")
+    # vectorstore = Chroma(
+    #     embedding_function=embedding_model,
+    #     collection_name="vcd", 
+    #     persist_directory="chroma_data"
+    # )
+
     rag = setup_rag_chain(vectorstore)
 
     print("\n--- RAG System Ready ---")
 
     # prompt = "Please tell me the exact time when the reset rst_ni signal is deasserted"
-    prompt = "How does the instr interface work?"
+    prompt = "How does the cpu_core instr interface work?"
 
     print("Searching and generating response...\n")
     response = rag.invoke({"input": prompt})
