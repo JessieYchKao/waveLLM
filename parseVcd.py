@@ -34,7 +34,7 @@ def deepseek(greet, prompt):
     print('Waiting for answer from Deepseek...\n')
     client = OpenAI(api_key=API_KEY, base_url="https://api.deepseek.com")
     response = client.chat.completions.create(
-        model="deepseek-chat",
+        model=MODEL_NAME,
         messages=[
             {"role": "system", "content": greet},
             {"role": "user", "content": prompt},
@@ -102,31 +102,32 @@ if __name__ == "__main__":
     
     
     
-    documents = load_and_chunk_vcd_data('dump.vcd')
+    # documents = load_and_chunk_vcd_data('dump.vcd')
 
     # TODO make loading an exitising documents array easier
-    with open('documents.pkl', 'wb') as f:
-        pickle.dump(documents, f)
+    # with open('documents.pkl', 'wb') as f:
+    #     pickle.dump(documents, f)
 
-    # with open('documents.pkl', 'rb') as f:
-    #     documents = pickle.load(f)
+    with open('documents.pkl', 'rb') as f:
+        documents = pickle.load(f)
 
-    vectorstore = setup_vector_store(documents)
+    # vectorstore = setup_vector_store(documents)
 
     # TODO Make reloading an existing DB easier
-    # embedding_model = OllamaEmbeddings(model="nomic-embed-text")
-    # vectorstore = Chroma(
-    #     embedding_function=embedding_model,
-    #     collection_name="vcd", 
-    #     persist_directory="chroma_data"
-    # )
+    embedding_model = OllamaEmbeddings(model="nomic-embed-text")
+    vectorstore = Chroma(
+        embedding_function=embedding_model,
+        collection_name="vcd", 
+        persist_directory="chroma_data"
+    )
 
     rag = setup_rag_chain(vectorstore)
 
     print("\n--- RAG System Ready ---")
 
     # prompt = "Please tell me the exact time when the reset rst_ni signal is deasserted"
-    prompt = "How does the cpu_core instr interface work?"
+    # prompt = "How does the hw_top.dut.u_hdcom28_top.cpu_core.instr* interface work?"
+    prompt = "at time 4250ns what is the value of instr_rdata_i"
 
     print("Searching and generating response...\n")
     response = rag.invoke({"input": prompt})

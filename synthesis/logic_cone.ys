@@ -14,53 +14,13 @@
 
 # Specify the Verilog source file(s) for your design.
 # Add more `read_verilog` commands if your design is split across multiple files.
-read_verilog  ../rtl/ibex/ibex_alu.sv
-read_verilog  ../rtl/ibex/ibex_branch_predict.sv
-read_verilog  ../rtl/ibex/ibex_compressed_decoder.sv
-read_verilog  ../rtl/ibex/ibex_controller.sv
-read_verilog  ../rtl/ibex/ibex_core.f
-read_verilog  ../rtl/ibex/ibex_core.sv
-read_verilog  ../rtl/ibex/ibex_counter.sv
-read_verilog  ../rtl/ibex/ibex_cs_registers.sv
-read_verilog  ../rtl/ibex/ibex_csr.sv
-read_verilog  ../rtl/ibex/ibex_decoder.sv
-read_verilog  ../rtl/ibex/ibex_dummy_instr.sv
-read_verilog  ../rtl/ibex/ibex_ex_block.sv
-read_verilog  ../rtl/ibex/ibex_fetch_fifo.sv
-read_verilog  ../rtl/ibex/ibex_icache.sv
-read_verilog  ../rtl/ibex/ibex_id_stage.sv
-read_verilog  ../rtl/ibex/ibex_if_stage.sv
-read_verilog  ../rtl/ibex/ibex_load_store_unit.sv
-read_verilog  ../rtl/ibex/ibex_lockstep.sv
-read_verilog  ../rtl/ibex/ibex_multdiv_fast.sv
-read_verilog  ../rtl/ibex/ibex_multdiv_slow.sv
-read_verilog  ../rtl/ibex/ibex_pkg.sv
-read_verilog  ../rtl/ibex/ibex_pmp.sv
-read_verilog  ../rtl/ibex/ibex_prefetch_buffer.sv
-read_verilog  ../rtl/ibex/ibex_register_file_ff.sv
-read_verilog  ../rtl/ibex/ibex_register_file_fpga.sv
-read_verilog  ../rtl/ibex/ibex_register_file_latch.sv
-read_verilog  ../rtl/ibex/ibex_top_tracing.sv
-read_verilog  ../rtl/ibex/ibex_top.sv
-read_verilog  ../rtl/ibex/ibex_tracer_pkg.sv
-read_verilog  ../rtl/ibex/ibex_tracer.sv
-read_verilog  ../rtl/ibex/ibex_wb_stage.sv
+read_verilog -sv  rtl/i2cmaster/i2c_master_bit_ctrl.v
+read_verilog -sv  rtl/i2cmaster/i2c_master_byte_ctrl.v
+read_verilog -sv  rtl/i2cmaster/i2c_master_defines.v
+read_verilog -sv  rtl/i2cmaster/i2c_master_top.v
 
-# Specify the top-level module of your design.
-# The `hierarchy` command will elaborate the design from this top module.
-hierarchy -top ibex_top
 
-# Specify the name of the register or wire you want to analyze.
-# For a wire within a submodule, use the full hierarchical path, e.g., "submodule_instance.my_wire".
-set target_signal "ibex_top.u_ibex_core.ex_block_i.alu_i.multdiv_sel_i"
-
-# Specify the type of logic cone to display:
-#   - "fanin":  Show the logic that drives the target signal (input cone).
-#   - "fanout": Show the logic that is driven by the target signal (output cone).
-set cone_type "fanin"
-
-# Specify the output file name for the visualization (without extension).
-set output_file "logic_cone_of_${target_signal}"
+hierarchy -top i2c_master_top
 
 #--------------------------------------------------------------------------
 # --- Script Logic ---
@@ -68,30 +28,19 @@ set output_file "logic_cone_of_${target_signal}"
 
 # Run a coarse synthesis to resolve processes and simplify the design.
 # This makes the logic cone analysis more meaningful.
-proc; opt
+prep -top i2c_master_top; memory; opt
 
 # Select the target signal.
 # The `select` command is used to specify the object of interest.
-select ${target_signal}
+select i2c_master_top
 
-# Select the logic cone based on the user's choice.
-#   %ci* selects the entire input cone (recursively).
-#   %co* selects the entire output cone (recursively).
-if { "${cone_type}" == "fanin" } {
-    select -assert-none "No object named '${target_signal}' found." %
-    select %ci*
-} elseif { "${cone_type}" == "fanout" } {
-    select -assert-none "No object named '${target_signal}' found." %
-    select %co*
-} else {
-    log_error "Invalid cone_type specified. Use 'fanin' or 'fanout'."
-    exit 1
-}
+
+# select -assert-none "No object named i2c_master_top.byte_controller.bit_controller.cmd found." %
+# select %ci*
+
 
 # Generate a graphical representation of the selected logic cone.
 # The `show` command uses `xdot` by default to display the schematic.
 # You can specify a different format with the `-format` option (e.g., -format svg).
-show -prefix ${output_file} -width -signed
+show -prefix cone i2c_master_top/wb_inta_o %ci*
 
-# Print a message indicating the script has finished.
-log "Successfully generated logic cone visualization for '${target_signal}' in '${output_file}.svg' (or other format)."

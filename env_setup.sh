@@ -18,7 +18,9 @@
 export PRJ_HOME=`git rev-parse --show-toplevel`
 
 # Set Yosys Path
-export PATH=../oss-cad-suite/bin:$PATH
+export PATH=~/oss-cad-suite/bin:$PATH
+export PATH=~/synlig:$PATH
+
 
 # Create the python venv
 # Name of the virtual environment directory
