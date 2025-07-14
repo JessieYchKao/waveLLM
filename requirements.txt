@@ -119,3 +119,6 @@ websockets
 yarl
 zipp
 zstandard
+networkx
+pydot
+datasets
