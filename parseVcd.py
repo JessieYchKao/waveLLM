@@ -2,6 +2,9 @@ from vcdvcd import VCDVCD
 import json
 import requests
 from langchain_ollama import OllamaLLM, OllamaEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import SentenceTransformerEmbeddings
+from sentence_transformers import SentenceTransformer
 from openai import OpenAI
 from langchain_core.documents import Document
 from langchain_core.prompts import ChatPromptTemplate
@@ -58,16 +61,27 @@ def load_and_chunk_vcd_data(vcd_file_path: str):
     return documents
 
 def setup_vector_store(documents):
-    embedding_model = OllamaEmbeddings(model="nomic-embed-text")
+    # embedding_model = OllamaEmbeddings(model="nomic-embed-text")
+    # embedding_model = SentenceTransformer(model_name_or_path="all-MiniLM-L6-v2", device="cuda")
+    model = SentenceTransformer("all-MiniLM-L6-v2", device="cuda")
+    
+    texts = [doc.page_content for doc in documents]
+    embedding_model = model.encode(texts, batch_size=64, show_progress_bar=True)
 
     print("Creating and populating vector database...")
-
-    vectorstore = Chroma.from_documents(
-        documents=documents,
-        embedding=embedding_model,
-        collection_name="vcd",
-        persist_directory="chroma_data"
-    )
+    vectorstore = Chroma.from_texts(
+            texts=texts,
+            embedding=embedding_model,
+            metadatas=[doc.metadata for doc in documents],
+            collection_name="vcd",
+            persist_directory="chroma_data"
+        )
+    # vectorstore = Chroma.from_documents(
+    #     documents=documents,
+    #     embedding=embedding_model,
+    #     collection_name="vcd",
+    #     persist_directory="chroma_data"
+    # )
     print("Vector database populated.")
     return vectorstore
 
@@ -109,17 +123,17 @@ if __name__ == "__main__":
     #     pickle.dump(documents, f)
 
     with open('documents.pkl', 'rb') as f:
-        documents = pickle.load(f)
+       documents = pickle.load(f)
 
-    # vectorstore = setup_vector_store(documents)
+    vectorstore = setup_vector_store(documents)
 
     # TODO Make reloading an existing DB easier
-    embedding_model = OllamaEmbeddings(model="nomic-embed-text")
-    vectorstore = Chroma(
-        embedding_function=embedding_model,
-        collection_name="vcd", 
-        persist_directory="chroma_data"
-    )
+    #embedding_model = OllamaEmbeddings(model="nomic-embed-text")
+    #vectorstore = Chroma(
+    #    embedding_function=embedding_model,
+    #    collection_name="vcd", 
+    #    persist_directory="chroma_data"
+    #)
 
     rag = setup_rag_chain(vectorstore)
 
