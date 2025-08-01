@@ -21,7 +21,7 @@ export PRJ_HOME=`git rev-parse --show-toplevel`
 export PATH=~/oss-cad-suite/bin:$PATH
 export PATH=~/synlig:$PATH
 
-
+export PATH=/opt/rh/devtoolset-11/root/usr/bin/:$PATH
 # Create the python venv
 # Name of the virtual environment directory
 VENV_DIR="WAVE_LLM_ENV"

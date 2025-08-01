@@ -32,6 +32,7 @@ ENV PATH="$PATH:/cadence/VMANAGER2309/bin"
 # IMPORTANT: Replace with your organization's license server(s)
 # Format: port@server1:port@server2:port@server3
 # Example: ENV CDS_LIC_FILE=5280@license-server-1:5280@license-server-2
+# CDS_LIC_FILE=5280@license.eecs.uci.edu
 ENV CDS_LIC_FILE=5280@license.eecs.uci.edu
 ENV LM_LICENSE_FILE="$CDS_LIC_FILE"
 
