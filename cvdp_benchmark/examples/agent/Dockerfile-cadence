@@ -1,0 +1,70 @@
+FROM rockylinux/rockylinux:8.10
+
+WORKDIR /
+
+# Add your Cadence tool archives here
+# These should be obtained from Cadence support portal.
+# The tools can be installed locally and then tgz'ed and added to the dockerfile.
+# Replace with your actual tool archive names and versions
+# COPY vmanager.tgz .
+# RUN tar -xzf vmanager.tgz -C . && rm vmanager.tgz
+ADD ../cadence/VMANAGER2309.tgz /cadence/VMANAGER2309
+ADD ../cadence/XCELIUM2309.tgz /cadence/XCELIUM2309
+
+# Install dependencies
+RUN dnf update -y && \
+    dnf upgrade -y && \
+    dnf install -y \
+        wget gcc make ksh tcsh redhat-lsb-core redhat-lsb-core.i686 \
+        libnsl libffi-devel zlib-devel bzip2-devel xz-devel \
+        ncurses-devel readline-devel sqlite-devel tk-devel \
+        openssl-devel libuuid-devel \
+        which tar curl git && \
+    dnf clean all
+
+# Include Xcelium in PATH
+# Update these paths based on your tool versions and installation locations
+# Format: /path/to/cadence/XCELIUM<VERSION>/bin
+ENV PATH="$PATH:/cadence/XCELIUM2309/bin"
+ENV PATH="$PATH:/cadence/XCELIUM2309/tools.lnx86/bin/64bit"
+
+# Include Vmanager in PATH  
+# Update this path based on your Vmanager version
+# Format: /path/to/cadence/VMANAGER<VERSION>/bin
+ENV PATH="$PATH:/cadence/VMANAGER2309/bin"
+
+# Configuration of the license
+# IMPORTANT: Replace with your organization's license server(s)
+# Format: port@server1:port@server2:port@server3
+# Example: ENV CDS_LIC_FILE=5280@license-server-1:5280@license-server-2
+# CDS_LIC_FILE=5280@license.eecs.uci.edu
+ENV CDS_LIC_FILE=5280@license.eecs.uci.edu
+ENV LM_LICENSE_FILE="$CDS_LIC_FILE"
+
+# ----------------------------------------
+# - Preparing Python Environment
+# ----------------------------------------
+
+
+
+# --- Build Python 3.12.5 from source ---
+WORKDIR /tmp
+RUN wget https://www.python.org/ftp/python/3.12.5/Python-3.12.5.tgz && \
+    tar -xzf Python-3.12.5.tgz && \
+    cd Python-3.12.5 && \
+    ./configure --enable-optimizations && \
+    make -j$(nproc) && \
+    make altinstall && \
+    cd .. && rm -rf Python-3.12.5*
+
+# --- Upgrade pip and install Python packages ---
+RUN python3.12 -m ensurepip && \
+    python3.12 -m pip install --upgrade pip && \
+    python3.12 -m pip install --no-cache-dir requests pyyaml pytest pytest-timeout
+
+
+WORKDIR /app
+
+# Install package
+
+

@@ -1,12 +1,20 @@
-FROM cvdp-example-agent-base
+# FROM cvdp-example-agent-base
+FROM cvdp-cadence-base
 
 WORKDIR /app
 
 # Create /code directory and set permissions
 RUN mkdir -p /code && chmod 777 /code
 
+# Copy and install equirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+
 # Copy agent code
 COPY agent.py .
+RUN chmod 777 agent.py
+
 
 # Set the entrypoint
 ENTRYPOINT ["python3.12", "/app/agent.py"]

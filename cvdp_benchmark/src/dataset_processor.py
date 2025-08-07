@@ -1527,12 +1527,14 @@ class AgenticProcessor (DatasetProcessor):
                         './rtl:/code/rtl',
                         './verif:/code/verif',
                         './rundir:/code/rundir',
-                        './prompt.json:/code/prompt.json'
+                        './prompt.json:/code/prompt.json',
+                        './src:/src:ro'
                     ],
                     'working_dir': '/code',
                     'environment': {
                         'OPENAI_USER_KEY': config.get('OPENAI_USER_KEY', '')
-                    }
+                    },
+                    'env_file': './src/.env'
                 }
             }
         }

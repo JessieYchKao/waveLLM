@@ -1,0 +1,3 @@
+[submodule "cvdp-benchmark-dataset"]
+	path = cvdp-benchmark-dataset
+	url = https://huggingface.co/datasets/nvidia/cvdp-benchmark-dataset
