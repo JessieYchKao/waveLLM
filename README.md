@@ -98,10 +98,13 @@ python3.12 run_benchmark.py -f cvdp_cid16_dataset.jsonl -l -m gpt-4o-mini
 ## Run benchmark with agent
 
 ### Build docker image of the agent
+
 ```bash
 cd examples/agent
 ./build_agent.sh
 ```
+Default max iteration is 5, if you want to change it, please modify MAX_ITR in .env file under cvdp_benchmark folder
+
 ### Run benchmark
 ```bash
 python3.12 run_benchmark.py -f cvdp-benchmark-dataset/alu.jsonl -l -g

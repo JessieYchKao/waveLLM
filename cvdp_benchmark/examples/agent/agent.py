@@ -19,9 +19,13 @@ import subprocess
 import logging
 
 base_path = '/code'
-MODEL_NAME = "deepseek-reasoner"
-API_KEY = "sk-api-key"
-MAX_ITR = 3 
+
+BASE_URL_DEEPSEEK = "https://api.deepseek.com"
+MODEL_NAME_DEEPSEEK = "deepseek-reasoner"
+BASE_URL_GPT_4O_MINI = ""
+MODEL_NAME_GPT_4O_MINI = "gpt-4o-mini"
+API_KEY = os.getenv("OPENAI_USER_KEY")
+MAX_ITR = int(os.getenv("MAX_ITR"))
 
 # Setup logging for agent
 log_path = f"{base_path}/rundir/agent.log"
@@ -78,11 +82,12 @@ def extractJson(text):
     else:
         return text.strip()
 
-def deepseek(prompt):
-    print('Waiting for answer from Deepseek...\n')
-    client = OpenAI(api_key=API_KEY, base_url="https://api.deepseek.com")
+def llm(prompt):
+    print('Waiting for answer from LLM...\n')
+    client = OpenAI(api_key=API_KEY, base_url=BASE_URL_DEEPSEEK)
+
     response = client.chat.completions.create(
-        model=MODEL_NAME,
+        model=MODEL_NAME_DEEPSEEK,
         messages=[
             {"role": "system", "content": greet},
             {"role": "user", "content": prompt},
@@ -185,7 +190,7 @@ def analyze_prompt_and_modify_files(prompt, itr = 0):
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
     write_file(f"{base_path}/rundir/agent_executed.txt", f"Agent executed at {timestamp}\nPrompt: {prompt}")
     
-    response = deepseek(prompt)
+    response = llm(prompt)
     if not response:
         return
 
@@ -257,9 +262,9 @@ def main():
             logging.info("=============== MISSION COMPLETED ==================")
             sys.exit(0)
     
-    print(f"Agent failed to pass the test within {itr} iterations.")
+    print(f"Agent failed to pass the test within {MAX_ITR} iterations.")
     logging.error(f"=============== MISSION FAILED ==================")
-    logging.error(f"Agent failed to pass the test within {itr} iterations.")
+    logging.error(f"Agent failed to pass the test within {MAX_ITR} iterations.")
 
 if __name__ == "__main__":
-    main() 
+    main()

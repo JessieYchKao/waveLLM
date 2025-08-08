@@ -1532,7 +1532,8 @@ class AgenticProcessor (DatasetProcessor):
                     ],
                     'working_dir': '/code',
                     'environment': {
-                        'OPENAI_USER_KEY': config.get('OPENAI_USER_KEY', '')
+                        'OPENAI_USER_KEY': config.get('OPENAI_USER_KEY', ''),
+                        'MAX_ITR': config.get('MAX_ITR', '5')
                     },
                     'env_file': './src/.env'
                 }

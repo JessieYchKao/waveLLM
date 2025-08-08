@@ -216,6 +216,7 @@ class Repository:
 
         cwd  = os.getcwd()
         key  = config.get('OPENAI_USER_KEY')
+        max_itr  = config.get('MAX_ITR')
         path = os.path.abspath(issue_path)
 
         # Running docker services
@@ -228,6 +229,10 @@ class Repository:
         # Adding OpenAI Key to the command line
         if key:
             cmd    += f" --env OPENAI_USER_KEY={key}"
+
+        # Adding Max iteration to the command line
+        if max_itr:
+            cmd    += f" --env MAX_ITR={max_itr}"
 
         return cmd
 
