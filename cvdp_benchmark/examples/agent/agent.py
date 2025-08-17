@@ -86,10 +86,26 @@ Here are some options that you have, but you can only pick one action at a time
 Depending on the task specified by the prompt intelligently select an action to provide more information, which will help you to complete the task.
 """
 
+def check_error(filename):
+
+    # ----------------------------------------
+    # - Check for errors in the log
+    # ----------------------------------------
+    print(f"Checking testing log file {filename}")
+    with open(filename) as f:
+        lines = f.readlines()
+
+    errors = []
+    for line in lines[3:]:
+        if re.findall(r'\*E', line):
+            print("Test has error")
+            return ", ".join(lines)
+    return ""
+
 def run_pytest():
     print("Running pytest")
     logger.info("=============== RUNNING PYTEST ============")
-    cmd = "pytest /src/process.py -v -s"
+    cmd = "pytest /src/process.py -v -s --timeout=60"
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     print(f"Pytest return with errorCode {result.returncode}")
     logger.debug(f"pytest result: {result}")
@@ -154,12 +170,13 @@ def read_prompt():
 
 def list_directory_files(dir_path):
     """List all files in a directory recursively"""
+    path = f"{base_path}/{dir_path}"
     files = []
-    if os.path.exists(dir_path):
-        for root, _, filenames in os.walk(dir_path):
+    if os.path.exists(path):
+        for root, _, filenames in os.walk(path):
             for filename in filenames:
                 full_path = os.path.join(root, filename)
-                rel_path = os.path.relpath(full_path, dir_path)
+                rel_path = os.path.relpath(full_path, path)
                 files.append(f"{dir_path}/{rel_path}")
     return files
 
@@ -198,9 +215,9 @@ def run_agent(prompt, itr = 0):
     logger.debug(prompt)
     
     # List files in each directory
-    rtl_files = list_directory_files(f"{base_path}/rtl")
-    verif_files = list_directory_files(f"{base_path}/verif")
-    docs_files = list_directory_files(f"{base_path}/docs")
+    rtl_files = list_directory_files(f"rtl")
+    verif_files = list_directory_files(f"verif")
+    docs_files = list_directory_files(f"docs")
     
     logger.debug(f"Found {len(rtl_files)} RTL files")
 
@@ -245,7 +262,7 @@ def run_agent(prompt, itr = 0):
     elif response["action"] == "readFiles":
         return False, read_files(response["filePath"])
     elif response["action"] == "listFiles":
-        return False, "File list under " + response["filePath"] + ":\n" + list_directory_files(file_path)
+        return False, "File list under " + response["filePath"] + ":\n" + ", ".join(list_directory_files(response["filePath"]))
     return False, ""
     '''
     # Example: Check if we need to modify an RTL file based on prompt
@@ -298,13 +315,29 @@ def main():
             if retcode != 0:
                 print("Pytest has error")
                 logger.info("Pytest has error")
-                error_msg = stdout + "\n" + stderr
-                
-                prompt = base_prompt + "\n\nThe previous code you've generated:\n"
+                err_sanity = check_error(f"{base_path}/rundir/sanity.log")
+                if err_sanity != "":
+                    error_msg = err_sanity
+                else: # Sanity has no error, check bug tests
+                    bug_logs = glob.glob(os.path.join(f"{base_path}/rundir", "bug_[0-9]*.log"))
+                    for bug_log in bug_logs: # Check every bug logs, provide error
+                        err_bug = check_error(bug_log)
+                        if err_bug == "":
+                            error_msg = "There's a hidden bug in the design, the testbench did not catch the bug. Double check the stimulus genration and checking matches the design specification."
+                            break
+                prompt += "\n============= BEGIN TASK EXPLAINATION AND SPECIFICATION ==============\n"
+                prompt = base_prompt 
+                prompt += "\n============= END TASK EXPLAINATION AND SPECIFICATION ==============\n"
+                prompt += "\n\nThe current code you've generated:\n"
+                prompt += "\n============= CURRENT CODE START ==============\n"
                 prompt += last_response
+                prompt += "\n============= CURRENT CODE END ==============\n"
                 prompt += "\n\nThe simulation test failed with the following errors:\n"
+                prompt += "\n============= BEGIN SIMULATION LOG ==============\n"
                 prompt += error_msg
-                prompt += "\nPlease fix it accordingly."
+                prompt += "\n============= END SIMULATION LOG ==============\n"
+                prompt += "\nPlease fix the syntax errors, module instantiation, or system verilog test bench errors. Refer to the error log and and orignal specification to make the correct modifications."
+                prompt += "\nErrors start with *E and give a line nummber for the error. For compilation errors pay special attention to syntax and module instantiation. For simulation functional errors double check stimulus and output checking is correct. Note that solving the first error may also resolve subsequent errors\n"
             else:
                 print("Test passed! Agent execution completed successfully.")
                 logger.info(f"=============== MISSION COMPLETED (Within {itr+1} iterations) ==================")
@@ -313,8 +346,10 @@ def main():
                 prompt = base_prompt + "\n\n" + last_response
                 if error_msg != "":
                     prompt += "\n\nThe previous simulation test failed with the following errors:\n"
+                    prompt += "\n============= BEGIN SIMULATION LOG ==============."
                     prompt += error_msg
-                    prompt += "\nPlease fix it accordingly."
+                    prompt += "\n============= END SIMULATION LOG ==============."
+                    prompt += "\nPlease fix the syntax errors, module instantiation, or system verilog test bench errors. Refer to the error log and and orignal specification to make the correct modifications. Errors start with *E and give a line nummber for the error, note that solving the first error may also resolve subsequent errors."
 
         print(f"Iteration {itr} completed.")
         logger.info(f"=============== ITERATION {itr} COMPLETED ===============")

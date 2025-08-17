@@ -15,6 +15,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY agent.py .
 RUN chmod 777 agent.py
 
+# Copy vcd converter code
+COPY vcd_to_text.py .
+RUN chmod 777 vcd_to_text.py
 
 # Set the entrypoint
 ENTRYPOINT ["python3.12", "/app/agent.py"]
