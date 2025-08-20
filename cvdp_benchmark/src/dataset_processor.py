@@ -421,6 +421,9 @@ When generating files, return the file name in the correct place at the folder s
 
         try:
             harness     = self.context[id]['harness']
+            # Add tcl file in harness
+            harness["src/run.tcl"] = "set pack_assert_off { std_logic_arithm numeric_std}\n# To open a database with a custom name\ndatabase -open my_vcd -vcd -into /code/rundir/sanitynigger.vcd\nprobe -create -database my_vcd $env(TB_TOP).$env(DUT_TOP) -ports\nrun 5000ns\nexit"
+            print("Adding tcl file to harness...")
             data_point  = id.split("_")
             name        = os.path.join(self.prefix, "cvdp_" + "_".join(data_point[1:-1]))
             issue       = int(data_point[-1])
@@ -1440,7 +1443,7 @@ class AgenticProcessor (DatasetProcessor):
     # - Process JSON File
     # ----------------------------------------
 
-    def __init__(self, filename : str, golden : bool = True, threads : int = 1, debug = False, host = False, prefix : str = None):
+    def __init__(self, filename : str, golden : bool = True, threads : int = 15, debug = False, host = False, prefix : str = None):
         super().__init__(filename, golden, threads, debug, host, prefix)
         self.agent_results = {}
         # Directory size monitor

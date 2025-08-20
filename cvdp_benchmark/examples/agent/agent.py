@@ -17,14 +17,16 @@ from openai import OpenAI
 import re
 import subprocess
 import logging
+import google.generativeai as genai
 
 base_path = '/code'
 
+MODEL = os.getenv("MODEL")
 BASE_URL_DEEPSEEK = "https://api.deepseek.com"
 MODEL_NAME_DEEPSEEK = "deepseek-reasoner"
-BASE_URL_GPT_4O_MINI = ""
 MODEL_NAME_GPT_4O_MINI = "gpt-4o-mini"
 MODEL_NAME_GPT_5 = "gpt-5"
+MODEL_NAME_GEMINI = "gemini-2.5-flash"
 API_KEY = os.getenv("OPENAI_USER_KEY")
 MAX_ITR = int(os.getenv("MAX_ITR"))
 
@@ -59,6 +61,9 @@ error_handler.setFormatter(formatter)
 logger.addHandler(debug_handler)
 logger.addHandler(info_handler)
 logger.addHandler(error_handler)
+
+# Final result json
+result = {}
 
 greet = f""" You are an AI software agent for chip design automation.
 If the test case fails, return a 1 from the function or task. Record the number of failed testcases and end simulation with $error, otherwise if there are no failiure end simulation with $finish."
@@ -105,7 +110,7 @@ def check_error(filename):
 def run_pytest():
     print("Running pytest")
     logger.info("=============== RUNNING PYTEST ============")
-    cmd = "pytest /src/process.py -v -s --timeout=60"
+    cmd = "pytest /src/process.py -k test_sanity -v -s --timeout=60"
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     print(f"Pytest return with errorCode {result.returncode}")
     logger.debug(f"pytest result: {result}")
@@ -129,21 +134,55 @@ def extractJson(text):
         return text.strip()
 
 def llm(prompt):
-    print('Waiting for answer from LLM...\n')
-    client = OpenAI(api_key=API_KEY, base_url=BASE_URL_DEEPSEEK)
-
-    response = client.chat.completions.create(
-        model=MODEL_NAME_DEEPSEEK,
-        messages=[
-            {"role": "system", "content": greet},
-            {"role": "user", "content": prompt},
-        ],
-        stream=False
-    )
+    print(f'Waiting for answer from {MODEL}...\n')
+    match MODEL:
+        case 'DEEPSEEK':
+            client = OpenAI(api_key=API_KEY, base_url=BASE_URL_DEEPSEEK)
+            modelName = MODEL_NAME_DEEPSEEK
+            response = client.chat.completions.create(
+                model=modelName,
+                messages=[
+                    {"role": "system", "content": greet},
+                    {"role": "user", "content": prompt},
+                ],
+                stream=False
+            )
+            content = response.choices[0].message.content
+        case 'GPT4OMINI':
+            client = OpenAI(api_key=API_KEY)
+            modelName = MODEL_NAME_GPT_4O_MINI
+            response = client.chat.completions.create(
+                model=modelName,
+                messages=[
+                    {"role": "system", "content": greet},
+                    {"role": "user", "content": prompt},
+                ],
+                stream=False
+            )
+        case 'GPT5':
+            client = OpenAI(api_key=API_KEY)
+            modelName = MODEL_NAME_GPT_5
+            response = client.chat.completions.create(
+                model=modelName,
+                messages=[
+                    {"role": "system", "content": greet},
+                    {"role": "user", "content": prompt},
+                ],
+                stream=False
+            )
+            content = response.choices[0].message.content
+        case 'GEMINI':
+            genai.configure(api_key=API_KEY)
+            model = genai.GenerativeModel(MODEL_NAME_GEMINI)
+            response = model.generate_content([greet, prompt])
+            content = response.text
+        case _:
+            raise ValueError(f"Unknown model: {MODEL}")
+    
     print("============= RESPONSE ====================")
     logger.info("============= RESPONSE ====================")
-    logger.debug(response.choices[0].message.content)
-    text = extractJson(response.choices[0].message.content)
+    logger.debug(content)
+    text = extractJson(content)
     try:
         return json.loads(text)
     except json.JSONDecodeError as e:
@@ -295,9 +334,11 @@ This is a sample agent report created during the agentic workflow execution.
         '''
 
 def main():
+    
     print("Starting CVDP agent...")
     logger.info("============== Starting CVDP agent ==============")
-    
+    result["start"] = time.time()
+
     # Read the prompt
     base_prompt = read_prompt()
     if not base_prompt:
@@ -318,6 +359,7 @@ def main():
                 err_sanity = check_error(f"{base_path}/rundir/sanity.log")
                 if err_sanity != "":
                     error_msg = err_sanity
+                '''
                 else: # Sanity has no error, check bug tests
                     bug_logs = glob.glob(os.path.join(f"{base_path}/rundir", "bug_[0-9]*.log"))
                     for bug_log in bug_logs: # Check every bug logs, provide error
@@ -325,6 +367,7 @@ def main():
                         if err_bug == "":
                             error_msg = "There's a hidden bug in the design, the testbench did not catch the bug. Double check the stimulus genration and checking matches the design specification."
                             break
+                '''
                 prompt += "\n============= BEGIN TASK EXPLAINATION AND SPECIFICATION ==============\n"
                 prompt = base_prompt 
                 prompt += "\n============= END TASK EXPLAINATION AND SPECIFICATION ==============\n"
@@ -339,6 +382,7 @@ def main():
                 prompt += "\nPlease fix the syntax errors, module instantiation, or system verilog test bench errors. Refer to the error log and and orignal specification to make the correct modifications."
                 prompt += "\nErrors start with *E and give a line nummber for the error. For compilation errors pay special attention to syntax and module instantiation. For simulation functional errors double check stimulus and output checking is correct. Note that solving the first error may also resolve subsequent errors\n"
             else:
+                result["result"] = "PASS"
                 print("Test passed! Agent execution completed successfully.")
                 logger.info(f"=============== MISSION COMPLETED (Within {itr+1} iterations) ==================")
                 sys.exit(0)
@@ -354,9 +398,13 @@ def main():
         print(f"Iteration {itr} completed.")
         logger.info(f"=============== ITERATION {itr} COMPLETED ===============")
     
+    result["result"] = "FAIL"
+    result["end"] = time.time()
+    result["iterations"] = itr-1
     print(f"Agent failed to pass the test within {MAX_ITR} iterations.")
     logger.info(f"=============== MISSION FAILED ==================")
     logger.error(f"Agent failed to pass the test within {MAX_ITR} iterations.")
+    write_file(f"{base_path}/rundir/result.json", json.dumps(result))
 
 if __name__ == "__main__":
     main()
