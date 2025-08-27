@@ -1,0 +1,18 @@
+-DNCSC
+-DXMSC
+-D_GLIBCXX_USE_CXX11_ABI=1 -c
+-I/home/tools/cadence/installs/XCELIUM2309/tools/inca/include
+-I/home/tools/cadence/installs/XCELIUM2309/tools/include
+-I/home/tools/cadence/installs/XCELIUM2309/tools/methodology/OVM/CDNS-2.1.2/sc/src
+-I/home/tools/cadence/installs/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/ml/sc
+-I/home/tools/cadence/installs/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/sc/sc
+-I/home/tools/cadence/installs/XCELIUM2309/tools/systemc/include/cci
+-I/home/tools/cadence/installs/XCELIUM2309/tools/systemc/include/factory
+-I/home/tools/cadence/installs/XCELIUM2309/tools/systemc/include/tlm2
+-I/home/tools/cadence/installs/XCELIUM2309/tools/systemc/include_pch
+-I/home/tools/cadence/installs/XCELIUM2309/tools/tbsc/include
+-I/home/tools/cadence/installs/XCELIUM2309/tools/vic/include
+-O0 -g
+-fPIC
+-pipe
+-x c++  -Wall

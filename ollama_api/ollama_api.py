@@ -1,5 +1,6 @@
 import requests
 import json
+import re
 
 # curl --location 'http://localhost:11434/api/generate' --data '{ "model": "llama3.2:latest", "prompt": "Why is the sky blue?", "stream": false }'
 
@@ -80,9 +81,19 @@ class Completions:
             content=ollama_response.get("response", "")
         )
         
-        choice = Choice(message=assistant_message)
-        
-        return Response(choices=[choice])
+        # message = Choice(message=assistant_message)
+
+        think_matches = re.findall(r"<think>(.*?)</think>", assistant_message.content, re.DOTALL)
+        think = " ".join(m.strip() for m in think_matches)
+
+        # Remove think tags to get the visible response
+        response = re.sub(r"<think>.*?</think>", "", assistant_message.content, flags=re.DOTALL).strip()
+
+        # Wrap into your Choice/Response structure
+        response_choice = Choice(message=Message(role="agent", content=response))
+        think_choice = Choice(message=Message(role="agent", content=think))
+
+        return Response(choices=[response_choice, think_choice])
 
 class Chat:
     '''
@@ -118,7 +129,7 @@ if __name__ == "__main__":
     client = Ollama(base_url="http://biaslab0.ics.uci.edu:11434")
 
     # 2. Define the model and messages
-    MODEL_NAME_OLLAMA = "llama3.2:latest"
+    MODEL_NAME_OLLAMA = "deepseek-r1:671b"
     greet_message = "You are a helpful assistant."
     user_prompt = "Why is the sky blue?"
 

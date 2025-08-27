@@ -1,0 +1,18 @@
+{
+    "xlm_snapshot": "uart_ctrl_top",
+    "xlm_lib": "worklib",
+    "xlm_view": "sv",
+    "lwd_version": "10\/13\/23+10:53:06",
+    "install_root": "\/home\/tools\/cadence\/installs\/XCELIUM2309",
+    "xlm_version": "23.09-s001",
+    "build_date": "2023.10.13",
+    "xlm_plat": "x86_64",
+    "xlm_bits": "64",
+    "real_as_wreal": "0",
+    "encrypted_sources": "0",
+    "reals_recorded": "0",
+    "features":
+    {
+        "AVSREQ_195145": "1"
+    }
+}

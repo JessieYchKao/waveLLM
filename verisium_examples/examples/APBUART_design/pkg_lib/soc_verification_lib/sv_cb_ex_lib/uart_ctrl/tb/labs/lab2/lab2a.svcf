@@ -1,0 +1,78 @@
+# SimVision Command Script (Thu Jul 14 05:48:05 PM PDT 2011)
+# Version 10.20.s070
+# You can restore this configuration with:
+#
+#     simvision -input lab2a.svcf
+#
+
+
+preferences set waveform-height 14
+#
+# Databases
+#
+database require waves -search {
+	./waves.shm/waves.trn
+}
+
+#
+# Cursors
+#
+set time 0
+if {[catch {cursor new -name  TimeB -time $time}] != ""} {
+    cursor set -using TimeB -time $time
+}
+set time 696ns
+if {[catch {cursor new -name  TimeA -time $time}] != ""} {
+    cursor set -using TimeA -time $time
+}
+
+#
+# Waveform windows
+#
+if {[catch {window new WaveWindow -name "Waveform 1" -geometry 1202x600+4+32}] != ""} {
+    window geometry "Waveform 1" 1202x600+4+32
+}
+window target "Waveform 1" on
+waveform using {Waveform 1}
+waveform sidebar visibility partial
+waveform set \
+    -primarycursor TimeA \
+    -signalnames name \
+    -signalwidth 228 \
+    -units ns \
+    -valuewidth 75
+cursor set -using TimeA -time 696ns
+waveform baseline set -time 0
+
+set id [waveform add -signals  {
+	waves::sequencer.simple_sequence
+	} ]
+waveform format $id -height 144
+set id [waveform add -signals  {
+	{waves::driver."Driver Frame"}
+	} ]
+waveform format $id -height 144
+
+waveform xview limits 0 696ns
+
+#
+# Transaction Stripe Chart windows
+#
+if {[catch {window new TransStripeChart -name "Transaction Stripe Chart 1" -geometry 1000x478+41+460}] != ""} {
+    window geometry "Transaction Stripe Chart 1" 1000x478+41+460
+}
+window target "Transaction Stripe Chart 1" on
+stripechart using {Transaction Stripe Chart 1}
+stripechart add \
+	waves::sequencer.simple_sequence \
+	{waves::driver."Driver Frame"} \
+	{waves::driver."Driver Frame"} \
+	{waves::driver."Driver Frame"} \
+	{waves::driver."Driver Frame"} \
+	{waves::driver."Driver Frame"}
+
+#
+# Console windows
+#
+console set -windowname Console
+window geometry Console 600x250+10+58

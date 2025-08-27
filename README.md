@@ -107,8 +107,7 @@ Default max iteration is 5, if you want to change it, please modify MAX_ITR in .
 
 ### Run benchmark
 ```bash
-python3.12 run_benchmark.py -f cvdp-benchmark-dataset/alu.jsonl -l -g
- cvdp-example-agent
+python3.12 run_benchmark.py -f cvdp-benchmark-dataset/alu.jsonl -l -g cvdp-example-agent
 ```
 ### Debug agent for a certain testbench in interactive mode
 ```bash

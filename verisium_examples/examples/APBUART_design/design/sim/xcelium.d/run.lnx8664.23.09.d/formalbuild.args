@@ -1,0 +1,14 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
++NoArgsToLog
+-64bit
+-NOWARN
+COVSEC
+-COVERAGE
+all
+-COVOVERWRITE
+-COVTEST
+apb_uart_rx_tx
+-UPDATE

@@ -1,0 +1,74 @@
+# SimVision Command Script (Thu Jul 14 07:07:33 PM PDT 2011)
+# Version 10.20.s070
+#
+# You can restore this configuration with:
+#
+#     simvision -input lab3a.svcf
+#
+
+
+#
+# Preferences
+#
+preferences set waveform-height 14
+#
+# Databases
+#
+database require waves -search {
+	./waves.shm/waves.trn
+}
+
+#
+# Cursors
+#
+set time 106ns
+if {[catch {cursor new -name  TimeA -time $time}] != ""} {
+    cursor set -using TimeA -time $time
+}
+
+#
+# Waveform windows
+#
+if {[catch {window new WaveWindow -name "Waveform 1" -geometry 1010x600+73+59}] != ""} {
+    window geometry "Waveform 1" 1010x600+73+59
+}
+window target "Waveform 1" on
+waveform using {Waveform 1}
+waveform sidebar visibility partial
+waveform set \
+    -primarycursor TimeA \
+    -signalnames name \
+    -signalwidth 175 \
+    -units ns \
+    -valuewidth 75
+cursor set -using TimeA -time 106ns
+waveform baseline set -time 689ns
+
+set id [waveform add -signals  {
+	waves::uart_top.uif0.clock
+	waves::uart_top.uif0.reset
+	waves::uart_top.uif0.txd
+	} ]
+set id [waveform add -signals  {
+	{waves::uart0.Tx.monitor."UART Monitor"}
+	} ]
+waveform format $id -height 158
+set id [waveform add -signals  {
+	waves::uart0.Tx.sequencer.uart_traffic_seq
+	} ]
+waveform format $id -height 124
+
+waveform xview limits 0 1166ns
+
+#
+# Transaction Stripe Chart windows
+#
+if {[catch {window new TransStripeChart -name "Transaction Stripe Chart 1" -geometry 1000x479+71+383}] != ""} {
+    window geometry "Transaction Stripe Chart 1" 1000x479+71+383
+}
+window target "Transaction Stripe Chart 1" on
+stripechart using {Transaction Stripe Chart 1}
+stripechart add \
+	waves::uart0.Tx.sequencer.uart_traffic_seq \
+	waves::uart0.Tx.driver.main \
+	{waves::uart0.Tx.monitor."UART Monitor"}

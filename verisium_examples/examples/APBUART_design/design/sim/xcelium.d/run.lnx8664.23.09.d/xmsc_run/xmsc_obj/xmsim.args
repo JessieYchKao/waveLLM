@@ -1,0 +1,5 @@
+-nocopyright
+-nowarn COVSEC
+-status
+-cdslib /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/./xcelium.d/run.lnx8664.23.09.d/cdsrun.lib
+-hdlvar /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/./xcelium.d/run.lnx8664.23.09.d/hdlrun.var

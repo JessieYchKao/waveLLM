@@ -1,0 +1,122 @@
+Picked up _JAVA_OPTIONS:  -XX:+ExitOnOutOfMemoryError -XX:OnOutOfMemoryError="touch /home/ading2/waveLLM/verisium_examples/examples/driver_tracing/verisium_debug_logs/out_of_memory_error" 
+CompilerOracle: exclude javax/swing/text/GlyphView.getBreakSpot
+Loading libdac.so from /home/tools/cadence/installs/VERISIUMDEBUGAGL2309//tools/lib/64bit/libdac.so
+in 'JDACTBDataProvider::openDBInner', dbPath = /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/SmartLogWaves.db/SmartLogWaves.shm, getExplicitLwdFlag() = null
+
+
+**** found lwd dir to be: /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv
+
+
+
+**** found cdslib to be: /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/run.d/cds.lib
+
+in 'SimConnect::loadSnapshotHelper', 'dbH' represents 'SmartLogWaves' db, 'lwdDbH' represents 'SmartLogWaves' db, PPEAttributes were fetched from 'SmartLogWaves' db. PPEAttributes values:
+    isAutofetch = false
+    isPersistentSources = false
+    isXprop = false
+    cdslib = /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/run.d/cds.lib
+    snapshot = worklib.uart_ctrl_top:sv
+    workdir = /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim
+    xceliumDir = /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d
+    rundDir = /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/run.d
+    bits = 64
+    cds_implicit_tmpdir = 
+    cds_alternate_tmpdir = 
+    du_agent = 
+    lwddir = /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv
+    cds_alternate_cdslib = 
+    elab_options = -NOWARN COVSEC -CDSLIB ./xcelium.d/run.lnx8664.23.09.d/cds.lib -HDLVAR ./xcelium.d/run.lnx8664.23.09.d/hdl.var -WORK worklib +fsmdebug -TCHNOSLACK -SDF_VERBOSE +UVM_VERBOSITY=MEDIUM +tcl+../..//pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/assert_opt.tcl +define+UART_ABV_ON +define+LITLE_ENDIAN +define+DYNAMIC_SIM +UVM_TESTNAME=uart_bad_parity_test -MESSAGES -ACCESS +r -COVDUT uart_ctrl_top -COVFILE ../..//pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/covfile.cf -COVERAGE all -loadpli1 /home/tools/cadence/installs/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/additions/sv/lib/64bit/libuvmpli.so:uvm_pli_boot -loadrun ./xcelium.d/run.lnx8664.23.09.d/librun -CREATEDEBUGDB worklib.uart_ctrl_top:sv
+    found = true
+    nclsRun = false
+    includeCdslib = true
+    nclsOpts =  -snapshot -cdslib /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/run.d/cds.lib -64
+    isMceMode = false
+    isMceInvolved = false
+    mceLshmDbPath = 
+    lowPowerInformationAvailable = false
+    hasLshmFile = false
+    workdirIsDirectory = true
+    hasOverlayRelatedInformation = true
+    cds_implicit_tmplib = worklib
+    cds_other_implicit_tmplibs = 
+
+in 'SimConnect::generateDuAgentCommand', cmd = [/home/tools/cadence/installs/VERISIUMDEBUGAGL2309/tools.lnx86/simvision/bin/64bit/cds-avs-du-agent, -nocopyright, -nowarn, DLNOCL, -xlm_install_root, /home/tools/cadence/installs/XCELIUM2309, -cdslib, /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/run.d/cds.lib, -cds_implicit_tmplib, worklib, -lwddir, /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv/debug_db, -cellname, uart_ctrl_top, -64]
+in 'SimConnect::execDuAgent_usingPreEstablishedServiceConnection', duAgent process pid = 92465
+
+
+in 'SimConnect::simControlConnectWithPreEstablishedConnection' overlay db = SmartLogWaves, overlayH = 9, is valid = true, operation = dapOpenOverlay, duFilename = /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv/debug_db/uart_ctrl_top/uart_ctrl_top.dsn, isLiveSim = false
+
+Dump DB Order:
+Strap design: SmartLogWaves #9
+ --> SmartLogWaves, path = /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/SmartLogWaves.db/SmartLogWaves.shm/SmartLogWaves.dsn, type = 4, #16
+ --> /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv/debug_db/uart_ctrl_top/uart_ctrl_top.dsn, path = /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv/debug_db/uart_ctrl_top/uart_ctrl_top.dsn, type = 4, #17
+
+End of dump DB Order
+
+
+
+
+**** found cdslib to be: ./xcelium.d/run.d/cds.lib
+
+
+
+**** Lwd path was derived from given DB. Loading lwd file from: /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv
+
+
+Dump DB Order:
+Strap design: SmartLogWaves #9
+ --> SmartLogWaves, path = /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/SmartLogWaves.db/SmartLogWaves.shm/SmartLogWaves.dsn, type = 4, #16
+ --> /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv/debug_db/uart_ctrl_top/uart_ctrl_top.dsn, path = /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv/debug_db/uart_ctrl_top/uart_ctrl_top.dsn, type = 4, #17
+
+End of dump DB Order
+
+
+
+
+**** found cdslib to be: ./xcelium.d/run.d/cds.lib
+
+
+
+**** Lwd path was derived from given DB. Loading lwd file from: /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv
+
+
+
+Scripting Service started, listening on port 54612...
+
+
+
+DT_MESSAGE starting DT for "uart_ctrl_top.cbus" at 100(0) 
+DT_MESSAGE single static driver "assign cbus = rdbus" 
+
+DT_MESSAGE starting DT for "uart_ctrl_top.dbus" at 32500(0) 
+DT_MESSAGE single static driver "assign dbus = {4{apb_if0.pwdata[7:0]}}" 
+
+DT_MESSAGE starting DT for "uart_ctrl_top.rdbus" at 100(0) 
+DT_MESSAGE add value match "wb_dat_o <= 0" 
+DT_MESSAGE ruled out no contrib change "wb_dat_o <= {24'b0,wb_dat8_o}" 
+DT_MESSAGE ruled out no contrib change "wb_dat_o <= {16'b0,wb_dat8_o,8'b0}" 
+DT_MESSAGE ruled out no contrib change "wb_dat_o <= {8'b0,wb_dat8_o,16'b0}" 
+DT_MESSAGE ruled out no contrib change "wb_dat_o <= {wb_dat8_o,24'b0}" 
+DT_MESSAGE ruled out xprop driver RHS != LHS "wb_dat_o <= wb_dat32_o" 
+DT_MESSAGE add value match "wb_dat_o <= 0" 
+DT_MESSAGE keep LHS changed relevance not 0 "wb_dat_o <= 0" 
+DT_MESSAGE keep relevance changed "wb_dat_o <= 0" 
+DT_WARNING reverting to old algorithm 2 drivers 
+DT_MESSAGE probability adjusted 0.950000 "wb_dat_o <= 0" 
+DT_MESSAGE probability adjusted 0.000000 "wb_dat_o <= 0" 
+
+DT_MESSAGE starting DT for "uart_ctrl_top.rdbus_x_checker.bus" at 100(0) 
+DT_MESSAGE add value match "wb_dat_o <= 0" 
+DT_MESSAGE ruled out no contrib change "wb_dat_o <= {24'b0,wb_dat8_o}" 
+DT_MESSAGE ruled out no contrib change "wb_dat_o <= {16'b0,wb_dat8_o,8'b0}" 
+DT_MESSAGE ruled out no contrib change "wb_dat_o <= {8'b0,wb_dat8_o,16'b0}" 
+DT_MESSAGE ruled out no contrib change "wb_dat_o <= {wb_dat8_o,24'b0}" 
+DT_MESSAGE ruled out xprop driver RHS != LHS "wb_dat_o <= wb_dat32_o" 
+DT_MESSAGE add value match "wb_dat_o <= 0" 
+DT_MESSAGE keep LHS changed relevance not 0 "wb_dat_o <= 0" 
+DT_MESSAGE keep relevance changed "wb_dat_o <= 0" 
+DT_WARNING reverting to old algorithm 2 drivers 
+DT_MESSAGE probability adjusted 0.950000 "wb_dat_o <= 0" 
+DT_MESSAGE probability adjusted 0.000000 "wb_dat_o <= 0" 
+*** shutting down gRPC server since JVM is shutting down
+*** server shut down

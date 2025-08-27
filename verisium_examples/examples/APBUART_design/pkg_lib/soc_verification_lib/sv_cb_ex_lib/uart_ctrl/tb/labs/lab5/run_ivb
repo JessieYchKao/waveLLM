@@ -1,0 +1,7 @@
+#!/bin/csh -f
+
+#setenv IVB_PLUGIN_DIR `pwd`/vr_uvc_kam
+#setenv SPECMAN_PATH ${IVB_PLUGIN_DIR}:$SPECMAN_PATH
+#echo "IVB plugin is set to $IVB_PLUGIN_DIR"
+
+ivb

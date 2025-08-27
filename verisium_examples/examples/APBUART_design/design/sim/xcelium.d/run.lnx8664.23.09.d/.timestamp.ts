@@ -1,0 +1,17 @@
+1697105884 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/sv/uart_ctrl_defines.svh
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/uart_receiver.v
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/uart_sync_flops.v
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/uart_defines.v
+1697105884 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/soc_verification_lib/sv_cb_ex_lib/interface_uvc_lib/uart/sv/uart_pkg.sv
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/uart_regs.v
+1697105884 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/sv/uart_ctrl_top_check_x.sv
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/uart_rfifo.v
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/uart_transmitter.v
+1697105884 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/soc_verification_lib/sv_cb_ex_lib/interface_uvc_lib/apb/sv/apb_pkg.sv
+1697105884 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/sv/uart_ctrl_pkg.sv
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/uart_debug_if.v
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/uart_wb.v
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/raminfr.v
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/uart_tfifo.v
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/pkg_lib/check_x.sv
+1697105883 /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/uart_top.v

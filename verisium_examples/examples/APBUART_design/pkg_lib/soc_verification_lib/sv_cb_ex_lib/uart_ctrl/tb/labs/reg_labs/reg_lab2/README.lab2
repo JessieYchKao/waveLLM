@@ -1,0 +1,70 @@
+UVM REG PACKAGE - March-2012
+
+LAB 2 - ADDING THE REGISTER COMPONENTS IN THE VERIFICATION ENVIRONMENT
+-------------------------------------------------------------------------
+For this lab, you will be hooking up the register components in the
+uart_ctrl design from our SOC Verification Kit.
+
+Objectives:
+  o Review the transaction adapter and register model
+  o Hook up the required components in the testbench
+  o Handling reset
+
+FIRST:
+Work in the $MY_WORK_AREA/reg_lab2 directory.
+
+   % cd  $SOCV_KIT_HOME/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/sv
+
+  o  Review the uart_ctrl_regs.sv file in this directory. It contains the
+     register definitions for this lab. It should be similar to the file
+     you generated in lab1.
+
+-------------------------------------------------------------------------
+
+   % cd $MY_WORK_AREA/reg_lab2
+
+LAB2A:  
+       
+  o  Transaction Adapter: reg_to_apb_adapter.sv
+     In transaction adapter file, 2 functions should be defined, reg2bus () and bus2reg().
+     reg2bus() is finished, please finish bus2reg() function.
+
+----------------------------------------------------------------------------
+Lab2B:  Hook up the required register components in the testbench
+   (NOTE: Search for UVM_REG and LAB2B in your lab database files)
+
+  o Edit the uart_ctrl_tb.sv and uart_ctrl_env.sv file in this directory.
+    Declare register model (uart_ctrl_reg_model_c reg_model) and transaction adapter (reg_to_apb_adatper reg2apb)
+
+    In the build_phase() method, 
+    Build the register model: reg_model, dont forget to lock it after building it. (uart_ctrl_tb.sv)
+    Build the transaction adapter in uart_ctrl_env.sv.
+
+    In the connect_phase() method, 
+    Register APB bus sequencer and the transaction adapter (reg2apb) with the default_map in the register model.
+
+    In the run_phase method
+    Print reg_model topology and initial values for all registers.
+ 
+At this point - you should be able to use the Makefile to compile/elaborate and simulate the testbench with registers included.  
+
+The default test in the Makefile should be executed:
+
+    % $SOCV_KIT_HOME/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/run.sh  
+
+----------------------------------------------------------------------------
+Lab2C:  Properly Handling Reset
+You will eventually have issues with reset unless you put in code to handle a hard reset.
+
+  o  Edit the uart_ctrl_tb.sv file in this directory.
+   (NOTE: Search for UVM_REG and LAB2C in your lab database files)
+
+    Finish reset_reg() task to call the reset() for the register model 
+    print the register model and its reset value.
+    Change run_phase() to add call reset_reg there.
+
+  Re-run your test in the $MY_WORK_AREA/reg_lab2 directory:
+
+    % $SOCV_KIT_HOME/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/run.sh  
+
+Good Luck!

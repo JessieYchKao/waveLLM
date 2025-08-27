@@ -1,0 +1,2 @@
+s1(26Aug2025:18:54:06):  xrun -f ..//scripts/xrun.args -input ..//scripts/probe.tcl +UVM_TESTNAME=uart_bad_parity_test 
+s2(26Aug2025:18:56:36):  xrun -f ..//scripts/xrun.args -input ..//scripts/probe.tcl +UVM_TESTNAME=uart_bad_parity_test 

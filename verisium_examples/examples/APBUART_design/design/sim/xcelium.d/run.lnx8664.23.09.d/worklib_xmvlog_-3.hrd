@@ -1,0 +1,36 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-assert
+-sv
+-DEFINE
+NONE
+-INCDIR
+../../pkg_lib/soc_verification_lib/sv_cb_ex_lib/interface_uvc_lib/apb/sv
+-INCDIR
+../../pkg_lib/soc_verification_lib/sv_cb_ex_lib/interface_uvc_lib/uart/sv
+-INCDIR
+../../pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/sv
+-INCDIR
+../../pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/sv/sequence_lib
+-INCDIR
+../../pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/sv
+-INCDIR
+../../pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/tests
+-INCDIR
+../../pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl
+-INCDIR
+/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl
+-DEFINE
+UART_ABV_ON
+-DEFINE
+LITLE_ENDIAN
+-DEFINE
+DYNAMIC_SIM
+-I_INCDIR
+/home/tools/cadence/installs/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/sv/src
+-DEFINE
+USE_PARAMETERIZED_WRAPPER
+-I_INCDIR
+/home/tools/cadence/installs/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/additions/sv

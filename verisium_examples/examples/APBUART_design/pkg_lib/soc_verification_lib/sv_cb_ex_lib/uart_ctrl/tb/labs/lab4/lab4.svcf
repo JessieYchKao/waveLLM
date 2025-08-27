@@ -1,0 +1,125 @@
+# SimVision Command Script (Thu Jul 14 08:20:51 PM PDT 2011)
+# Version 10.20.s070
+# You can restore this configuration with:
+#
+#      irun -f run1.f -input lab4.tcl
+#
+
+preferences set waveform-height 14
+
+# Simulator
+database require simulator -hints {
+	simulator "irun -f run1.f -input lab4.tcl"
+}
+
+#
+# Groups
+#
+catch {group new -name APB_IF -overlay 0}
+catch {group new -name UART_IF -overlay 0}
+
+group using APB_IF
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+
+group insert \
+     simulator::uart_tb_top.apbi0.pclock  \
+     simulator::uart_tb_top.apbi0.paddr  \
+     simulator::uart_tb_top.apbi0.pwdata  \
+     simulator::uart_tb_top.apbi0.prwd  \
+     simulator::uart_tb_top.apbi0.penable  \
+     simulator::uart_tb_top.apbi0.pready  \
+     simulator::uart_tb_top.apbi0.prdata  \
+     simulator::uart_tb_top.apbi0.psel 
+
+group using UART_IF
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+
+group insert \
+     simulator::uart_tb_top.uif0.clock  \
+     simulator::uart_tb_top.uif0.reset  \
+     simulator::uart_tb_top.uif0.txd  \
+     simulator::uvm_test_top.uart_ctrl_tb0.uart0.Tx.sequencer.concurrent_u2a_a2u_rand_trans  \
+     simulator::uart_tb_top.uif0.rxd  \
+     {simulator::uvm_test_top.uart_ctrl_tb0.uart0.Rx.monitor."UART Monitor"} 
+
+#
+# Cursors
+#
+set time 63ns
+if {[catch {cursor new -name  TimeA -time $time}] != ""} {
+    cursor set -using TimeA -time $time
+}
+
+#
+# Design Browser windows
+#
+if {[catch {window new WatchList -name "Design Browser 1" -geometry 700x500+10+58}] != ""} {
+    window geometry "Design Browser 1" 700x500+10+58
+}
+window target "Design Browser 1" on
+browser using {Design Browser 1}
+browser set -scope  simulator::worklib.uvm_pkg:: 
+browser set \
+    -signalsort name
+browser yview see  simulator::worklib.uvm_pkg:: 
+browser timecontrol set -lock 0
+
+#
+# Waveform windows
+#
+if {[catch {window new WaveWindow -name "Waveform 1" -geometry 1010x821+265+25}] != ""} {
+    window geometry "Waveform 1" 1010x821+265+25
+}
+window target "Waveform 1" on
+waveform using {Waveform 1}
+waveform sidebar visibility partial
+waveform set \
+    -primarycursor TimeA \
+    -signalnames name \
+    -signalwidth 175 \
+    -units ns \
+    -valuewidth 75
+cursor set -using TimeA -time 63ns
+waveform baseline set -time 520ns
+
+
+set groupId0 [waveform add -groups APB_IF]
+
+set id [waveform add -signals  {
+	simulator::uvm_test_top.uart_ctrl_tb0.apb0.master.sequencer.concurrent_u2a_a2u_rand_trans
+	} ]
+waveform format $id -height 78
+
+set groupId0 [waveform add -groups UART_IF]
+set gpGlist0 [waveform hierarchy contents $groupId0]
+set gpID0 [lindex $gpGlist0 0]
+foreach {name attrs}  {
+    simulator::uart_tb_top.uif0.clock {}
+    simulator::uart_tb_top.uif0.reset {}
+    simulator::uart_tb_top.uif0.txd {}
+    simulator::uvm_test_top.uart_ctrl_tb0.uart0.Tx.sequencer.concurrent_u2a_a2u_rand_trans {-height 62}
+    simulator::uart_tb_top.uif0.rxd {}
+    {simulator::uvm_test_top.uart_ctrl_tb0.uart0.Rx.monitor."UART Monitor"} {-height 58}
+} {
+    set expected [ join [waveform signals -format fullpath $gpID0] ]
+    if {[string equal $name $expected]} {
+        if {$attrs != ""} {
+            eval waveform format $gpID0 $attrs
+        }
+    }
+    set gpGlist0 [lrange $gpGlist0 1 end]
+    set gpID0 [lindex $gpGlist0 0]
+}
+
+
+waveform xview limits 0 4000ns
+
+#
+# Console windows
+#
+console set -windowname Console
+window geometry Console 700x250+89+689
