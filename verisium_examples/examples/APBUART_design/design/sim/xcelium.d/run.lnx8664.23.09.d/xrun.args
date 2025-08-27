@@ -1,0 +1,9 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-f
+..//scripts/xrun.args
+-input
+..//scripts/probe.tcl
++UVM_TESTNAME=uart_bad_parity_test

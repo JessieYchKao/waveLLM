@@ -1,0 +1,65 @@
+UVM REG PACKAGE - March 2012
+
+LAB 3 - REGISTER SEQUENCES
+-----------------------------------------------------------------
+For this lab, you will be exploring register sequences for the
+uart_ctrl design from our SOC Verification Kit.
+
+Objectives:
+  o Create a register sequence
+  o Execute a register sequence in conjunction with virtual sequences
+
+Work in the $MY_WORK_AREA/reg_lab3 directory.
+
+-----------------------------------------------------------------
+LAB3A: Observe register sequencer behavior
+  o  Open uart_ctrl_reg_seq_lib.sv.
+     Review the existing sequences:
+     SEQUENCE: apb_cfg_reg_seq - configures the UART registers via APB sequencer
+     SEQUENCE: uart_ctrl_config_reg_seq - configures the UART registers
+     SEQUENCE: ua_lab3_seq - sequence for the register sequencer
+               For now, this sequence just does nothing
+
+  o  Run a simple test - 
+
+   %  cd $MY_WORK_AREA/reg_lab3
+
+   Review the test: apb_uart_rx_tx.sv
+
+   Look for TEST: apb_uart_rx_tx 
+     It sets the default sequence for the virtual sequencer 
+         (concurrent_u2a_a2u_rand_trans_vseq) 
+
+   Review virtual sequence library: uart_ctrl_virtual_sequence_lib.sv
+     Look for virtual sequence: concurrent_u2a_a2u_rand_trans_vseq
+     It starts the register sequence: uart_ctrl_config_reg_seq
+
+   Now run the test
+     %  cd $MY_WORK_AREA/reg_lab3
+     %  $SOCV_KIT_HOME/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/run.sh \
+	-test apb_uart_rx_tx 
+
+   You should see a read/write to the control register in the irun log file.
+
+-----------------------------------------------------------------
+LAB3B: Write a new register sequence!
+  o  Open uart_ctrl_reg_seq_lib.sv and edit the sequence:
+     ua_lab3_seq
+
+     This sequence basically does the same thing as uart_ctrl_config_reg_seq
+     but after each write to register is followed by a read back
+
+  o  Open uart_ctrl_virtual_seq_lib.sv and edit virtual sequence:
+     concurrent_u2a_a2u_rand_trans_vseq
+
+    In this sequecne, instead of start register sequence uart_ctrl_config_reg_seq
+    we will start register sequence ua_lab3_seq
+
+  o  Re-run the test - now the nested sequence has more to do...
+     %  cd $MY_WORK_AREA/reg_lab3
+     %  $SOCV_KIT_HOME/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/run.sh \
+        -test apb_uart_rx_tx
+
+     Verify that your register was correctly written and read!
+
+Good Luck!

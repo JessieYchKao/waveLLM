@@ -1,0 +1,46 @@
+UVM REG PACKAGE - March-2012
+
+LAB 4 - ADDING THE REGISTER COMPONENTS IN THE VERIFICATION ENVIRONMENT
+-------------------------------------------------------------------------
+For this lab, you will be hooking up the register components in the
+uart_ctrl design from our SOC Verification Kit.
+
+Objectives:
+  o Review the transaction adapter and register model
+  o Hook up the required components in the testbench
+  o Handling reset
+
+Before starting this lab - remember to source the setup.csh file
+
+FIRST:
+Work in the $MY_WORK_AREA/reg_lab4 directory.
+   % cd  $SOCV_KIT_HOME/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/sv
+
+  o  Review the uart_ctrl_regs.sv file in this directory. It contains the
+     register definitions for this lab. It should be similar to the file
+     you generated in lab1.
+
+----------------------------------------------------------------------------
+   Hook up the predictor in the testbench
+   (NOTE: Search for UVM_REG and LAB4 in your lab database files)
+
+  o Edit the uart_ctrl_tb.sv and uart_ctrl_env.sv file in this directory.
+    Declare the predictor (uvm_reg_predictor#(apb_transfer) apb_predictor)
+
+    In the build_phase() method, 
+    Build the predictor: apb_predictor
+
+    In the connect_phase() method, 
+    Connect the register model and transaction adapter (reg2apb) to predictor.
+    Connect the analysis port from APB monitor to TLM port of predictor. 
+    This is how predictor get all the transactions.
+
+At this point - you should be able to use the Makefile to compile/elaborate and simulate the testbench with registers included.  
+
+The default test in the Makefile should be executed:
+
+    % $SOCV_KIT_HOME/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/run.sh  
+
+----------------------------------------------------------------------------
+
+Good Luck!

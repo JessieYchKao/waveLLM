@@ -1,0 +1,3 @@
+-O0 -g
+/home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/../..//pkg_lib/dpi_code/libtest_v1.so
+./xcelium.d/run.lnx8664.23.09.d/xmsc_run/xmsc_obj/uvm_dpi.o

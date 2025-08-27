@@ -1,0 +1,47 @@
+-uvmhome default \
+-assert \
+-sv \
+-createdebugdb\
+-g \
+-64bit \
++fsmdebug \
+-define NONE \
+$SIMDEBUG_WS/pkg_lib/dpi_code/libtest_v1.so \
+-incdir $SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/interface_uvc_lib/apb/sv \
+-incdir $SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/interface_uvc_lib/uart/sv \
+-incdir $SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/sv \
+-incdir $SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/sv/sequence_lib \
+-incdir $SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/sv \
+-incdir $SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/tests \
+-incdir $SIMDEBUG_WS/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl \
+$SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/interface_uvc_lib/apb/sv/apb_pkg.sv \
+$SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/interface_uvc_lib/uart/sv/uart_pkg.sv \
+$SIMDEBUG_WS/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/rtl/uart_defines.v \
+-F $SIMDEBUG_WS/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/oc_uart.irunargs \
+$SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/sv/uart_ctrl_defines.svh \
+$SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/sv/uart_ctrl_pkg.sv \
+$CUR_LABDIR/pkg_lib/check_x.sv \ 
+-assert_count_traces \
+-nowarn COVSEC \
++tcl+$SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/assert_opt.tcl \
+-svseed 123456 \
++UVM_VERBOSITY=MEDIUM \
++define+UART_ABV_ON \
++define+LITLE_ENDIAN \
++define+DYNAMIC_SIM \
+-propfile_vlog $SIMDEBUG_WS/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/assertions/receiver_vunit.psl \
+-propfile_vlog $SIMDEBUG_WS/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/assertions/rx_fifo_vunit.psl \
+-propfile_vlog $SIMDEBUG_WS/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/assertions/transmitter_vunit.psl \
+-propfile_vlog $SIMDEBUG_WS/pkg_lib/designs/socv/rtl/rtl_lpw/opencores/uart16550/assertions/tx_fifo_vunit.psl \
+$SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/sv/uart_ctrl_top_check_x.sv \
+$XMROOT/tools/methodology/UVM/CDNS-1.1d/sv/src/dpi/uvm_dpi.cc \
+-status \
+-status3 \
+-access +r \
+-covfile $SIMDEBUG_WS/pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/covfile.cf \ 
+-coverage all \
+-mcdump \
+-covoverwrite \
+-sdf_verbose \
+-covtest apb_uart_rx_tx \
+-covdut uart_ctrl_top 

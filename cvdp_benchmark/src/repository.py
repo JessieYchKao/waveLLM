@@ -130,7 +130,7 @@ class Repository:
         self.safely_create_dir(f"{path}/rundir")
 
     def write_file(self, filename, content):
-
+        print(f"Write file {filename}")
         file = os.path.join(self.name, filename)
         dir  = os.path.dirname(file)
 
@@ -155,7 +155,7 @@ class Repository:
             # Apply centralized template substitution for EDA infrastructure
             content = apply_template_substitution(content)
                            
-            # Filter out rundir volumes from docker-compose.yml
+            # Filter out rundir volumes and modify pytest command from docker-compose.yml
             if file.endswith('docker-compose.yml'):
                 
                 try:
@@ -175,6 +175,10 @@ class Repository:
                                     else:
                                         filtered_volumes.append(volume)
                                 service_config['volumes'] = filtered_volumes
+                            # Only run sanity test
+                            if service_name == "xrun" and service_config["command"]:
+                                service_config["command"] = service_config["command"].replace("process.py", "process.py -k test_sanity")
+
                                 
                         # Add network configuration if not already present
                         network_name = self.network_name or config.get('LICENSE_NETWORK')
@@ -190,6 +194,21 @@ class Repository:
                         content = yaml.dump(data, default_flow_style=False)
                 except Exception as e:
                     print(f"Error processing docker-compose.yml: {str(e)}")
+
+            # Optimize process.py
+            if file.endswith('process.py'):
+                print('Customizing process.py')
+                # TODO: Replace `xrun` with `xrun -input /src/run.tcl`
+                # content = content.replace("sim = f\"xrun", "sim = f\"xrun -input /src/run.tcl")
+                # Replace `-seed random\"` with `-access +rwc -seed random -timescale 1ns/1ns\"`
+                replacement = "-access +rwc -seed random"
+                # Check if timescale exists. If not, add timescale to xrun command
+                if "-timescale" in content:
+                    replacement += "\""
+                else:
+                    replacement += " -timescale 1ns/1ns\""
+                content = content.replace("-seed random\"", replacement)
+                print(f"Customized process.py: {content}")
 
             self.write_file(f"harness/{self.id}/{file}", content)
 
@@ -216,6 +235,7 @@ class Repository:
 
         cwd  = os.getcwd()
         key  = config.get('OPENAI_USER_KEY')
+        max_itr  = config.get('MAX_ITR')
         path = os.path.abspath(issue_path)
 
         # Running docker services
@@ -228,6 +248,10 @@ class Repository:
         # Adding OpenAI Key to the command line
         if key:
             cmd    += f" --env OPENAI_USER_KEY={key}"
+
+        # Adding Max iteration to the command line
+        if max_itr:
+            cmd    += f" --env MAX_ITR={max_itr}"
 
         return cmd
 

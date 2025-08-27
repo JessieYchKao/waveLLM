@@ -1,0 +1,51 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-INPUT
+"@source /home/tools/cadence/installs/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/additions/sv/files/tcl/uvm_sim.tcl"
++UVM_VERBOSITY=MEDIUM
++tcl+../..//pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/assert_opt.tcl
++define+UART_ABV_ON
++define+LITLE_ENDIAN
++define+DYNAMIC_SIM
+-uvmhome
+/home/tools/cadence/installs/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d
+-sv_lib
+/home/tools/cadence/installs/XCELIUM2309/tools/methodology/UVM/CDNS-1.1d/additions/sv/lib/64bit/libuvmpli.so
+-assert_count_traces
+-NOWARN
+COVSEC
+-INPUT
+../..//pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/assert_opt.tcl
+-SVSEED
+123456
+-STATUS
+-STATUS3
+-MCDUMP
+-COVOVERWRITE
+-SDF_VERBOSE
+-COVTEST
+apb_uart_rx_tx
+-INPUT
+..//scripts/probe.tcl
++UVM_TESTNAME=uart_bad_parity_test
+-MESSAGES
++EMGRLOG
+xrun.log
+-XLSTIME
+1756259796
+-XLKEEP
+-XLMODE
+./xcelium.d/run.lnx8664.23.09.d
+-RUNMODE
+-CDSLIB
+./xcelium.d/run.lnx8664.23.09.d/cds.lib
+-HDLVAR
+./xcelium.d/run.lnx8664.23.09.d/hdl.var
+-XLNAME
+xrun
+-XLVERSION
+"TOOL:	xrun(64)	23.09-s001"
+-XLNAME
+./xcelium.d/run.lnx8664.23.09.d/biaseda-ics-uci-edu_dc6851c9-b63a-428f-9256-643ec75a4791

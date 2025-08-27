@@ -1,0 +1,8 @@
+#!/bin/sh
+
+
+irun -uvmhome ${UVM_HOME} \
+  +access+r \
+  +UVM_VERBOSITY=UVM_MEDIUM \
+  -incdir ./ \
+   demo_top.sv

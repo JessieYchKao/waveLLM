@@ -1,0 +1,16 @@
+lwd_dir /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv/debug_db/uart_ctrl_top/../..
+snapshot_name worklib.uart_ctrl_top:sv
+cells 1
+hostname biaseda-ics-uci-edu
+work_directory /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim
+autofetch 0
+persistent_sources 0
+cdslib ./xcelium.d/run.lnx8664.23.09.d/cds.lib
+cds_implicit_tmplib worklib
+hdlvar ./xcelium.d/run.lnx8664.23.09.d/hdl.var
+platform x86_64
+bits 64
+du-agent YES
+xprop 0
+automsie 0
+cds_libs /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/run.lnx8664.23.09.d/cds.lib /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/run.lnx8664.23.09.d/cdsrun.lib /home/tools/cadence/installs/XCELIUM2309/tools/inca/files/cds.lib /home/tools/cadence/installs/XCELIUM2309/tools/inca/files/cdsvhdl.lib /home/tools/cadence/installs/XCELIUM2309/tools/inca/files/cdsvlog.lib /home/tools/cadence/installs/XCELIUM2309/tools/transrecord/files/cds.lib /home/tools/cadence/installs/XCELIUM2309/tools/affirma_ams/etc/connect_lib/cds.lib /home/tools/cadence/installs/XCELIUM2309/tools/affirma_ams/etc/dms/cds.lib

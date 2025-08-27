@@ -1,0 +1,4 @@
++tb_no_warn+COVSEC
++tb_rc_dir+./xcelium.d/run.lnx8664.23.09.d/xmsc_run
++tb_run_dir+/home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim
++tb_trans_record

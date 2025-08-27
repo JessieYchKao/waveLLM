@@ -1,0 +1,51 @@
+UVM REG PACKAGE - MARCH 2012
+
+LAB 1 - REGISTER FILE DEFINITION AND GENERATION 
+---------------------------------------------------------------
+For this lab, you will be exploring the register generation capability:
+  o Run the IPXACT parser to convert an xml/spirit file to SystemVerilog
+    register definitions file.
+  o Add a register to the XML file and review your results
+  o OPTIONALLY Use Eclipse to make your changes
+
+Before getting started, you must set IREG_GEN your installation
+of the Cadence ireggen parser
+
+ %  setenv IREG_GEN <Incisiv Install Path>/tools/methodology/iregGen
+
+1.  Examine the provided spirit file "uart_ctrl_regs.xml"
+
+Identify the main elements: memoryMaps, memoryMap, addressBlock, register and field
+
+Use the parser to generate SystemVerilog code:
+ % $IREG_GEN/bin/iregGen -i uart_ctrl_regs.xml -o uart_ctrl_regs.sv 
+
+Review the generated code: uart_ctrl_regs.sv
+
+The parser has additional command line options that may be useful:
+  -help           (to list all the parser options)
+  -o <filename>   (to optionally specify an output file name)
+  -qt <testname>  (tells the parser to generate a simple standalone test)
+
+2. Add a register to the XML file:
+   The definition can be added anywhere within the register file, but I 
+   suggest you add it after the ua_lcr register and before ua_div_latch1 (~Line 263 - LAB1).
+
+      Register: DIV LATCH 0 Register 
+      Offset: 0x00
+      Reg Name: ua_div_latch0
+      Access:   read-write
+      ResetVal: 0x00
+      Fields:   [7:0]  div_val   (clock divisor value)
+
+  You will also need to include the following vendorExtension:
+      Type: ua_div_latch0_c  (register class name)
+      Constraint: div_val.value == 1
+
+3. Re-run the script and review the generated code
+4. Use the register file in a simple test.
+   %  run.me
+
+   The test builds the register database and calls the hard_reset() to reset
+   all registers.  Review the irun.log file to verify that the ua_div_latch0 and ua_div_latch1 reset
+   value is correctly set

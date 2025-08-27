@@ -1,0 +1,14 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+-CREATEDEBUGDB
++FSMDEBUG
+-ACCESS
++r
+-COVFILE
+../..//pkg_lib/soc_verification_lib/sv_cb_ex_lib/uart_ctrl/tb/scripts/covfile.cf
+-COVERAGE
+all
+-COVDUT
+uart_ctrl_top

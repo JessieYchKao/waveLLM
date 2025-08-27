@@ -1,0 +1,12 @@
+Design
+	Design Connection Mode: LWD
+	Design Agent PID: 92465
+	Design/LWD Path: /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv/debug_db/uart_ctrl_top/uart_ctrl_top.dsn
+	Design Database: /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/xcelium.d/worklib/uart_ctrl_top/sv/debug_db/debug_db_design
+Databases
+	Flow Database: /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/SmartLogWaves.db
+	Log Database: /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/SmartLogWaves.db
+	SHM Database: /home/ading2/waveLLM/verisium_examples/examples/APBUART_design/design/sim/SmartLogWaves.db/SmartLogWaves.shm
+Versions
+	xcelium version: 23.09-s001
+	lwd/snapshot version: 23.09-s001

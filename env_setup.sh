@@ -65,6 +65,9 @@ else
 fi
 
 
+python3 -m pip install $VERISIUM_DEBUG_ROOT/tools/indago/scripting/dist/indago-23.9.71-py3-none-any.whl
+
+
 echo "WAVE_LLM_ENV ENVIROMENT ACTIVATED"
 
 
